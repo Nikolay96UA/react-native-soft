@@ -31,7 +31,7 @@ export default function App() {
   return (
     <>
       <StatusBar style="auto" />
-      <RegistrationScreen />
+      <LoginScreen />
 
       {/* <Text style={myStyles.titleWithStyles}>This is "Text" component before "View" component</Text>
       <View style={myStyles.container}>
