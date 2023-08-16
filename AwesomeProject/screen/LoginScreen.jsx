@@ -21,9 +21,15 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [showPass, setShowPass] = useState(true);
+
   const [isFocused, setIsFocused] = useState(false);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
   const [textInputVisible, setTextInputVisible] = useState(true);
+
+  const showPassword = () => {
+    setShowPass(!showPass);
+  };
 
   const onSubmit = () => {
     console.log(email);
@@ -98,9 +104,9 @@ const LoginScreen = () => {
               <View style={{ marginTop: 16, position: "relative" }}>
                 <TextInput
                   placeholder="Пароль"
-                  secureTextEntry={true}
                   onChangeText={setPassword}
                   value={password}
+                  secureTextEntry={showPass}
                   style={[
                     styles.input,
                     isFocusedInput === "input2" ? styles.focusedInput : null,
@@ -108,14 +114,21 @@ const LoginScreen = () => {
                   onFocus={() => handleFocus("input2")}
                   onBlur={handleBlur}
                 />
-                <TouchableOpacity style={styles.showPasswordBtn}>
+                <TouchableOpacity
+                  style={styles.showPasswordBtn}
+                  onPressIn={showPassword}
+                >
                   <Text style={styles.passwordText}>Показати</Text>
                 </TouchableOpacity>
               </View>
 
               {textInputVisible && (
                 <>
-                  <TouchableOpacity style={styles.btn} activeOpacity={0.8} onPress={onSubmit}>
+                  <TouchableOpacity
+                    style={styles.btn}
+                    activeOpacity={0.8}
+                    onPress={onSubmit}
+                  >
                     <Text style={styles.btnTitle}>Увійти</Text>
                   </TouchableOpacity>
 

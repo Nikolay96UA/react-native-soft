@@ -23,6 +23,8 @@ const RegistrationScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [showPass, setShowPass] = useState(true);
+
   const [isFocused, setIsFocused] = useState(false);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
 
@@ -32,6 +34,10 @@ const RegistrationScreen = () => {
     console.log(email);
     console.log(password);
     console.log(login);
+  };
+
+  const showPassword = () => {
+    setShowPass(!showPass);
   };
 
   const handleKeyboardDidShow = () => {
@@ -112,6 +118,7 @@ const RegistrationScreen = () => {
                     regStyles.inputsAll,
                     isFocusedInput === "input3" ? regStyles.focusedInput : null,
                   ]}
+                  secureTextEntry ={showPass}
                   onChangeText={setPassword}
                   onFocus={() => handleFocus("input3")}
                   onBlur={handleBlur}
@@ -119,7 +126,7 @@ const RegistrationScreen = () => {
                 />
                 <Pressable
                   style={{ position: "absolute", top: 0, right: 0 }}
-                  onPressIn={() => {}}
+                  onPressIn={showPassword}
                 >
                   <Text style={regStyles.inputText}>Показати</Text>
                 </Pressable>
