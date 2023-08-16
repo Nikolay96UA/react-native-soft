@@ -12,15 +12,27 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import BgImage from "../image/background.jpg";
 import addIcon from "../image/add.png";
 
 const RegistrationScreen = () => {
+  const [login, setLogin] = useState("");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [isFocused, setIsFocused] = useState(false);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
 
   const [textInputVisible, setTextInputVisible] = useState(true);
+
+  const onSubmit = () => {
+    console.log(email);
+    console.log(password);
+    console.log(login);
+  };
 
   const handleKeyboardDidShow = () => {
     setTextInputVisible(false);
@@ -57,13 +69,13 @@ const RegistrationScreen = () => {
   };
 
   return (
-    <View style={regStyles.container}>
-      <ImageBackground
-        source={BgImage}
-        resizeMode="cover"
-        style={regStyles.bgImg}
-      >
-       
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={regStyles.container}>
+        <ImageBackground
+          source={BgImage}
+          resizeMode="cover"
+          style={regStyles.bgImg}
+        >
           <View style={regStyles.formView}>
             <View style={regStyles.userPhoto}>
               <View style={regStyles.userPhotoPlus}>
@@ -71,44 +83,56 @@ const RegistrationScreen = () => {
               </View>
             </View>
             <Text style={regStyles.mainTitle}>Реєстрація</Text>
-            <TextInput
-              placeholder="Логін"
-              style={[
-                regStyles.inputsAll,
-                isFocusedInput === "input1" ? regStyles.focusedInput : null,
-              ]}
-              onFocus={() => handleFocus("input1")}
-              onBlur={handleBlur}
-            />
-            <TextInput
-              style={[
-                regStyles.inputsAll,
-                isFocusedInput === "input2" ? regStyles.focusedInput : null,
-              ]}
-              onFocus={() => handleFocus("input2")}
-              onBlur={handleBlur}
-              placeholder="Адреса електронної пошти"
-            />
-            <View style={{ position: "relative" }}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
+            >
+              <TextInput
+                placeholder="Логін"
+                style={[
+                  regStyles.inputsAll,
+                  isFocusedInput === "input1" ? regStyles.focusedInput : null,
+                ]}
+                onChangeText={setLogin}
+                onFocus={() => handleFocus("input1")}
+                onBlur={handleBlur}
+              />
               <TextInput
                 style={[
                   regStyles.inputsAll,
-                  isFocusedInput === "input3" ? regStyles.focusedInput : null,
+                  isFocusedInput === "input2" ? regStyles.focusedInput : null,
                 ]}
-                onFocus={() => handleFocus("input3")}
+                onChangeText={setEmail}
+                onFocus={() => handleFocus("input2")}
                 onBlur={handleBlur}
-                placeholder="Пароль"
+                placeholder="Адреса електронної пошти"
               />
-              <Pressable
-                style={{ position: "absolute", top: 0, right: 0 }}
-                onPressIn={() => {}}
-              >
-                <Text style={regStyles.inputText}>Показати</Text>
-              </Pressable>
-            </View>
+              <View style={{ position: "relative" }}>
+                <TextInput
+                  style={[
+                    regStyles.inputsAll,
+                    isFocusedInput === "input3" ? regStyles.focusedInput : null,
+                  ]}
+                  onChangeText={setPassword}
+                  onFocus={() => handleFocus("input3")}
+                  onBlur={handleBlur}
+                  placeholder="Пароль"
+                />
+                <Pressable
+                  style={{ position: "absolute", top: 0, right: 0 }}
+                  onPressIn={() => {}}
+                >
+                  <Text style={regStyles.inputText}>Показати</Text>
+                </Pressable>
+              </View>
+            </KeyboardAvoidingView>
+
             {textInputVisible && (
               <>
-                <TouchableOpacity style={regStyles.btn} activeOpacity={0.8}>
+                <TouchableOpacity
+                  style={regStyles.btn}
+                  activeOpacity={0.8}
+                  onPress={onSubmit}
+                >
                   <Text style={regStyles.btnTitle}>Зареєструватися</Text>
                 </TouchableOpacity>
 
@@ -119,10 +143,10 @@ const RegistrationScreen = () => {
                 </TouchableOpacity>
               </>
             )}
-
           </View>
-      </ImageBackground>
-    </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

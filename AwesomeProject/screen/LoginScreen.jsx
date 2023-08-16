@@ -18,10 +18,17 @@ import { GlobalStyles } from "../GlobalStyle";
 import BgImage from "../image/background.jpg";
 
 const LoginScreen = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [isFocused, setIsFocused] = useState(false);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
-
   const [textInputVisible, setTextInputVisible] = useState(true);
+
+  const onSubmit = () => {
+    console.log(email);
+    console.log(password);
+  };
 
   const handleKeyboardDidShow = () => {
     setTextInputVisible(false);
@@ -58,10 +65,8 @@ const LoginScreen = () => {
   };
 
   return (
-    <TouchableWithoutFeedback>
-      <View
-        style={GlobalStyles.container}
-      >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={GlobalStyles.container}>
         <ImageBackground
           source={BgImage}
           resizeMode="cover"
@@ -74,6 +79,8 @@ const LoginScreen = () => {
             >
               <View>
                 <TextInput
+                  onChangeText={setEmail}
+                  value={email}
                   style={[
                     styles.input,
                     isFocusedInput === "input1" ? styles.focusedInput : null,
@@ -92,6 +99,8 @@ const LoginScreen = () => {
                 <TextInput
                   placeholder="Пароль"
                   secureTextEntry={true}
+                  onChangeText={setPassword}
+                  value={password}
                   style={[
                     styles.input,
                     isFocusedInput === "input2" ? styles.focusedInput : null,
@@ -106,7 +115,7 @@ const LoginScreen = () => {
 
               {textInputVisible && (
                 <>
-                  <TouchableOpacity style={styles.btn} activeOpacity={0.8}>
+                  <TouchableOpacity style={styles.btn} activeOpacity={0.8} onPress={onSubmit}>
                     <Text style={styles.btnTitle}>Увійти</Text>
                   </TouchableOpacity>
 
@@ -126,7 +135,7 @@ const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFFFF", paddingBottom:10, },
+  container: { flex: 1, backgroundColor: "#FFFFFF", paddingBottom: 10 },
 
   backgroundImg: {
     flex: 1,
