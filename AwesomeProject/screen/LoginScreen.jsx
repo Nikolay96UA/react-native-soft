@@ -36,6 +36,8 @@ const LoginScreen = () => {
     console.log(password);
   };
 
+ 
+
   const handleKeyboardDidShow = () => {
     setTextInputVisible(false);
   };
