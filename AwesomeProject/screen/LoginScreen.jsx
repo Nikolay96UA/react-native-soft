@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
   ImageBackground,
   Image,
@@ -13,134 +12,165 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import validator from "validator";
 
-import { GlobalStyles } from "../GlobalStyle";
-import BgImage from "../image/background.jpg";
+import background from "../image/background.jpg";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../Redux/Auth/authOperations";
+import { GlobalStyles } from "../GlobalStyles";
 
-const LoginScreen = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const initialState = {
+  email: "",
+  password: "",
+};
 
-  const [showPass, setShowPass] = useState(true);
+export default LoginScreen = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
 
-  const [isFocused, setIsFocused] = useState(false);
+  const [state, setState] = useState(initialState);
+  const [isValid, setIsValid] = useState(false);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
-  const [textInputVisible, setTextInputVisible] = useState(true);
+  const [secureText, setSecureText] = useState(true);
 
-  const showPassword = () => {
-    setShowPass(!showPass);
+  const validateForm = () => {
+    const { email, password } = state;
+    const isValidEmail = validator.isEmail(email);
+    const isValidPassword = password.trim().length >= 8;
+    // const isValidPassword = validator.isAlphanumeric(password)
+    setIsValid(isValidEmail && isValidPassword);
   };
-
-  const onSubmit = () => {
-    console.log(email);
-    console.log(password);
-  };
-
- 
-
-  const handleKeyboardDidShow = () => {
-    setTextInputVisible(false);
-  };
-
-  const handleKeyboardDidHide = () => {
-    setTextInputVisible(true);
-  };
-
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      Platform.OS === "android" ? "keyboardDidShow" : "keyboardWillShow",
-      handleKeyboardDidShow
-    );
+    validateForm();
+  }, [state.email, state.password]);
 
-    const keyboardDidHideListener = Keyboard.addListener(
-      Platform.OS === "android" ? "keyboardDidHide" : "keyboardWillHide",
-      handleKeyboardDidHide
-    );
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
 
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
+    Keyboard.dismiss();
+  };
+  const handleSubmit = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    dispatch(authSignInUser(state));
+    setState(initialState);
+  };
 
   const handleFocus = (key) => {
     setIsFocusedInput(key);
-    setIsFocused(true);
+    setIsShowKeyboard(true);
   };
-
   const handleBlur = () => {
-    setIsFocused(false);
+    setIsFocusedInput(null);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={GlobalStyles.container}>
         <ImageBackground
-          source={BgImage}
+          source={background}
           resizeMode="cover"
           style={styles.backgroundImg}
         >
-          <View style={styles.form}>
+          <View
+            style={{
+              ...styles.form,
+              paddingBottom: isShowKeyboard ? 120 : 80,
+            }}
+          >
             <Text style={styles.formTitle}>Увійти</Text>
             <KeyboardAvoidingView
-              behavior={Platform.OS == "android" ? "padding" : "height"}
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
               <View>
                 <TextInput
-                  onChangeText={setEmail}
-                  value={email}
-                  style={[
-                    styles.input,
-                    isFocusedInput === "input1" ? styles.focusedInput : null,
-                  ]}
-                  placeholder="Адреса електронної пошти"
-                  onFocus={() => handleFocus("input1")}
-                  onBlur={handleBlur}
-                />
-
-                {/* <Text style={{ color: `#ff0000` }}>
-                  Поле Email заповнено не коректно
-                </Text> */}
-              </View>
-
-              <View style={{ marginTop: 16, position: "relative" }}>
-                <TextInput
-                  placeholder="Пароль"
-                  onChangeText={setPassword}
-                  value={password}
-                  secureTextEntry={showPass}
                   style={[
                     styles.input,
                     isFocusedInput === "input2" ? styles.focusedInput : null,
                   ]}
+                  placeholder="Адреса електронної пошти"
                   onFocus={() => handleFocus("input2")}
                   onBlur={handleBlur}
+                  value={state.email}
+                  onChangeText={(value) => {
+                    setState((prevState) => ({ ...prevState, email: value }));
+                    // validEmail(value);
+                  }}
                 />
-                <TouchableOpacity
-                  style={styles.showPasswordBtn}
-                  onPressIn={showPassword}
-                >
-                  <Text style={styles.passwordText}>Показати</Text>
+
+                {state.email.length > 0 && !validator.isEmail(state.email) && (
+                  <Text style={{ color: `#ff0000` }}>
+                    Поле Email заповнено не коректно
+                  </Text>
+                )}
+              </View>
+              <View style={{ marginTop: 16, position: "relative" }}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    isFocusedInput === "input3" ? styles.focusedInput : null,
+                  ]}
+                  placeholder="Пароль"
+                  secureTextEntry={true}
+                  onFocus={() => handleFocus("input3")}
+                  onBlur={handleBlur}
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, password: value }))
+                  }
+                />
+                <TouchableOpacity style={styles.showPasswordBtn}>
+                  <Text
+                    style={styles.passwordText}
+                    onPress={() => setSecureText(!secureText)}
+                  >
+                    Показати
+                  </Text>
                 </TouchableOpacity>
+                {state.password.length < 8 && state.password.length > 0 && (
+                  <Text style={{ color: `#ff0000` }}>
+                    Пароль має містити не менше 8 символів
+                  </Text>
+                )}
               </View>
 
-              {textInputVisible && (
-                <>
-                  <TouchableOpacity
-                    style={styles.btn}
-                    activeOpacity={0.8}
-                    onPress={onSubmit}
-                  >
-                    <Text style={styles.btnTitle}>Увійти</Text>
-                  </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.btn,
+                  { backgroundColor: !isValid ? "#F6F6F6" : "#FF6C00" },
+                ]}
+                activeOpacity={0.8}
+                disabled={!isValid}
+                onPress={handleSubmit}
+                // onPress={() => {
+                //   navigation.navigate("Home", {
+                //     screen: "Posts",
+                //     params: { userId: `${state.email}` },
+                //   });
+                // }}
+              >
+                <Text
+                  style={[
+                    styles.btnTitle,
+                    { color: !isValid ? "#BDBDBD" : "#FFFFFF" },
+                  ]}
+                >
+                  Увійти
+                </Text>
+              </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.navLink} activeOpacity={0.8}>
-                    <Text style={styles.navLinkText}>
-                      Немає акаунту? Зареєструватися
-                    </Text>
-                  </TouchableOpacity>
-                </>
-              )}
+              <TouchableOpacity
+                style={styles.navLink}
+                onPress={() => navigation.navigate("Register")}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.navLinkText}>
+                  Немає акаунту?
+                  <Text style={{ color: `#0000cd` }}>Зареєструватися</Text>
+                </Text>
+              </TouchableOpacity>
             </KeyboardAvoidingView>
           </View>
         </ImageBackground>
@@ -150,8 +180,10 @@ const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFFFF", paddingBottom: 10 },
-
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: "#fff",
+  // },
   backgroundImg: {
     flex: 1,
     // resizeMode: "cover",
@@ -162,8 +194,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 16,
     paddingTop: 32,
-    paddingBottom: 32,
-
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     // marginBottom: 150,
@@ -221,6 +251,8 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontFamily: "Roboto-Regular",
+    // alignItems: "center",
+    // justifyContent: "center",
     alignSelf: "center",
   },
   navLink: {
@@ -232,10 +264,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     justifyContent: "center",
-    marginBottom: 32,
 
     fontFamily: "Roboto-Regular",
   },
 });
-
-export default LoginScreen;
