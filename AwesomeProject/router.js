@@ -3,15 +3,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import { useRoute } from "@react-navigation/native";
 import RegistrationScreen from "./screen/RegistrationScreen";
-import LoginScreen from "./screen/LoginScreen";
+import LoginScreen from "./screens/LoginScreen";
 import { Ionicons } from "@expo/vector-icons";
-// import HomeScreen from "./src/screens/Main/HomeScreen";
-import PostsScreen from "./screen/PostsScreen";
-import CreatePostScreen from "./screen/CreatePostsScreen";
-// import CommentsScreen from "./src/screens/RestedScreens/CommentsScreen";
-// import MapScreen from "./src/screens/RestedScreens/MapScreen";
-import ProfileScreen from "./screen/ProfileScreen";
-// import TestingScreen from "./src/screens/TestingScreen";
+import PostsScreen from "./screen/PostsScreen.jsx";
+import CreatePostScreen from "./screen/CreatePostsScreen.jsx";
+import ProfileScreen from "./screen/ProfileScreen"; // import TestingScreen from "./src/screens/TestingScreen";
 
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
@@ -37,12 +33,9 @@ export const chooseRoute = (isAuth) => {
   }
   return (
     <MainTab.Navigator
-      // screenOptions={{ tabBarLabel: () => false }}
       screenOptions={({ route }) => ({
-        // tabBarStyle: { alignItems: "stretch" },
         tabBarActiveTintColor: "#FF6C00",
         tabBarInactiveTintColor: "#212121",
-        // tabBarItemStyle: { justifyContent: "center" },
         tabBarLabel: () => false,
 
         tabBarIcon: ({ focused, color, size }) => {
@@ -67,7 +60,6 @@ export const chooseRoute = (isAuth) => {
       <MainTab.Screen
         name="CreatePost"
         component={CreatePostScreen}
-        // options={{ title: "Створити публікацію" }}
         options={{
           title: "Створити публікацію",
           tabBarIcon: ({ focused, color }) => (

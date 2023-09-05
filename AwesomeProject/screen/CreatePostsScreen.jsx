@@ -18,8 +18,8 @@ import * as MediaLibrary from "expo-media-library";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { useSelector } from "react-redux";
-import { db, storage } from "../firebase/config";
-import { GlobalStyles } from "../GlobalStyles";
+import { db, storage } from "../../../firebase/config";
+import { GlobalStyles } from "../../../GlobalStyles";
 
 export default function CreatePostScreen() {
   const navigation = useNavigation();
@@ -110,20 +110,6 @@ export default function CreatePostScreen() {
       // Обробка помилки
     }
   };
-
-  // const uploadPhotoToServer = async () => {
-  //   console.log("photo", photo);
-  //   const response = await fetch(photo);
-  //   console.log("response", response);
-  //   // ! певодім фотографию в формат blob()(ето нужно для файрбейс)
-  //   const file = await response.blob();
-  //   console.log("file", file);
-  //   const uniquePostId = nanoid();
-
-  //   // // db;
-  //   const data = await storage().ref(`postImage/${uniquePostId}`).put(file);
-  //   console.log("data", data);
-  // };
 
   const sendPhoto = () => {
     uploadPostToServer();
@@ -241,23 +227,13 @@ export default function CreatePostScreen() {
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  // paddingHorizontal: 16,
-  // paddingTop: 32,
-  //   backgroundColor: "#fff",
-  // },
-
   cameraContainer: {
     height: 260,
     marginBottom: 32,
-    // borderRadius: 10,
   },
   camera: {
-    // flex: 1,
     height: 240,
     borderRadius: 10,
-    // width: 300
   },
   cameraTitle: {
     marginTop: 8,
@@ -268,9 +244,7 @@ const styles = StyleSheet.create({
   photoView: {
     flex: 1,
 
-    // backgroundColor: "transparent",
     justifyContent: "center",
-    // borderRadius: 10,
   },
   takenPhotoContainer: {
     position: "absolute",
@@ -280,11 +254,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
   },
-
-  // flipContainer: {
-  //   flex: 0.1,
-  //   alignSelf: "flex-end",
-  // },
 
   takePhotoBtn: { alignItems: "center", justifyContent: "center" },
 
@@ -303,27 +272,19 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
 
-    // borderRadius: 5,
     height: 50,
 
     color: "#212121",
-    // backgroundColor: "#E8E8E8",
   },
   onPublicBtn: {
     height: 50,
     borderRadius: 100,
     marginTop: 43,
     padding: 15,
-    // backgroundColor: "#FF6C00",
-    // alignItems: "center",
-    // justifyContent: "center",
   },
   onPublicBtnTitle: {
-    // color: "#FFFFFF",
     fontSize: 16,
     fontFamily: "Roboto-Regular",
-    // alignItems: "center",
-    // justifyContent: "center",
     alignSelf: "center",
   },
   delPhoto: {
