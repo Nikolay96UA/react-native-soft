@@ -1,34 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 
-<<<<<<< HEAD
 import { View } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import CommentsScreen from "./CommentsScreen";
-import MapScreen from "./MapScreen";
-import DefaultPostsScreen from "./DefaultPostsScreen";
+import CommentsScreen from "../NestedScreens/CommentsScreen";
+import MapScreen from "../NestedScreens/MapScreen";
+import DefaultPostsScreen from "../NestedScreens/DefaultPostsScreen";
 import { useDispatch } from "react-redux";
-import { authSignOutUser } from "../Redux/Auth/authOperations";
-=======
-import {
-  StyleSheet,
-  View,
-  ImageBackground,
-  Text,
-  TextInput,
-  Button,
-  Pressable,
-  Image,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Keyboard,
-} from "react-native";
->>>>>>> parent of ee35bb2 (add firebase)
+import { authSignOutUser } from "../../../Redux/Auth/authOperations";
 
+const nestedStack = createStackNavigator();
 
 const PostsScreen = () => {
-<<<<<<< HEAD
   const dispatch = useDispatch();
   const signOut = () => {
     dispatch(authSignOutUser());
@@ -69,11 +54,5 @@ const PostsScreen = () => {
       />
     </nestedStack.Navigator>
   );
-=======
-  return;
->>>>>>> parent of ee35bb2 (add firebase)
 };
-
-const regStyles = StyleSheet.create({});
-
 export default PostsScreen;

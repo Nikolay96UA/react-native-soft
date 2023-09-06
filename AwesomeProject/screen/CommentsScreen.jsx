@@ -24,7 +24,11 @@ const CommentsScreen = ({ route }) => {
   const [photoUrl, setPhotoUrl] = useState(null);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
+=======
+
+>>>>>>> Stashed changes
   const getPhotoFromFirestore = async () => {
     const querySnapshot = await getDocs(collection(db, "posts"));
     const post = querySnapshot.docs.find((doc) => doc.id === postId);
@@ -66,8 +70,6 @@ const CommentsScreen = ({ route }) => {
     return postsData;
   };
 
-=======
->>>>>>> parent of ee35bb2 (add firebase)
   const keyboardHide = () => {
     setIsShowKeyboard(false);
 
@@ -198,9 +200,16 @@ const CommentsScreen = ({ route }) => {
   );
 };
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 styles = StyleSheet.create({});
 =======
 
 >>>>>>> parent of ee35bb2 (add firebase)
+=======
+
+styles = StyleSheet.create({});
+
+
+>>>>>>> Stashed changes
 export default CommentsScreen;

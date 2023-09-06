@@ -20,6 +20,10 @@ const ProfileScreen = () => {
 
   const [userPosts, setUserPosts] = useState([]);
 <<<<<<< HEAD
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+>>>>>>> Stashed changes
   const [like, setLike] = useState(0);
   const { userId, nickName } = useSelector((state) => state.auth);
 
@@ -49,6 +53,14 @@ const ProfileScreen = () => {
 
 
 >>>>>>> parent of ee35bb2 (add firebase)
+<<<<<<< Updated upstream
+=======
+=======
+
+
+
+>>>>>>> parent of ee35bb2 (add firebase)
+>>>>>>> Stashed changes
 
   return (
     <View style={GlobalStyles.container}>
@@ -106,6 +118,10 @@ const ProfileScreen = () => {
                             : "chatbubble-outline"
                         }
 <<<<<<< HEAD
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+>>>>>>> Stashed changes
                         style={{ fontSize: 24, color: "#FF6C00" }} // Змінити розмір іконки на 30
                       />
 =======
@@ -113,6 +129,14 @@ const ProfileScreen = () => {
                       />
                       
 >>>>>>> parent of ee35bb2 (add firebase)
+<<<<<<< Updated upstream
+=======
+=======
+                        style={{ fontSize: 24, color: "#FF6C00" }} 
+                      />
+                      
+>>>>>>> parent of ee35bb2 (add firebase)
+>>>>>>> Stashed changes
                     </TouchableOpacity>
                     <Text style={{ marginRight: 20 }}>{userPosts.length}</Text>
                     <TouchableOpacity
@@ -125,6 +149,13 @@ const ProfileScreen = () => {
                         style={{ fontSize: 24, color: "#FF6C00" }} 
                       />
 <<<<<<< HEAD
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+=======
+                      
+>>>>>>> parent of ee35bb2 (add firebase)
+>>>>>>> Stashed changes
 =======
                       
 >>>>>>> parent of ee35bb2 (add firebase)

@@ -10,15 +10,13 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/stack": "^6.3.17",
     "expo": "~48.0.18",
-<<<<<<< HEAD
     "expo-camera": "^13.4.2",
     "expo-dev-client": "~2.2.1",
-=======
->>>>>>> parent of ee35bb2 (add firebase)
     "expo-font": "~11.1.1",
     "expo-status-bar": "~1.4.4",
     "react": "^18.2.0",
@@ -29,7 +27,8 @@
     "react-native-paper": "^5.10.3",
     "react-native-safe-area-context": "^4.7.1",
     "react-native-screens": "^3.24.0",
-    "react-native-tab-view": "^3.5.2"
+    "react-native-tab-view": "^3.5.2",
+    "react-redux": "^8.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
