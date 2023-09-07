@@ -13,6 +13,10 @@ const Main = () => {
   }, []);
   const routing = chooseRoute(stateChange);
 
+  //   onAuthStateChanged(auth, (user) => {
+  //     setUser(user);
+  //   });
+
   return <NavigationContainer>{routing}</NavigationContainer>;
 };
 

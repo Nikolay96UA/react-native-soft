@@ -28,10 +28,12 @@ const DefaultPostsScreen = ({ route }) => {
           id: doc.id,
         }));
         setPosts(comments);
+        // console.log("posts", posts);
       }
     );
   };
 
+  // * рефакторим юсеффект
   useEffect(() => {
     getAllPosts();
   }, []);
@@ -56,6 +58,7 @@ const DefaultPostsScreen = ({ route }) => {
         <Image style={{ width: 60, marginRight: 10 }} source={user} />
         <View>
           <Text style={styles.userName}>{nickName}</Text>
+          {/* <Text style={styles.userEmail}>{email}</Text> */}
         </View>
       </View>
       <FlatList
@@ -66,6 +69,8 @@ const DefaultPostsScreen = ({ route }) => {
             style={{
               marginTop: 32,
               marginBottom: 10,
+              // justifyContent: "center",
+              // alignItems: "center",
             }}
           >
             <Image
@@ -79,6 +84,7 @@ const DefaultPostsScreen = ({ route }) => {
               style={{
                 width: "100%",
                 flexDirection: "row",
+                // alignSelf: "flex-start",
                 justifyContent: "space-between",
               }}
             >
@@ -93,6 +99,9 @@ const DefaultPostsScreen = ({ route }) => {
                   name={"chatbubble-outline"}
                   style={{ fontSize: 24, color: "#BDBDBD" }} // Змінити розмір іконки на 30
                 />
+                {/* <Text style={styles.navLinkText}>
+          Немає акаунту? <Text style={{ color: `#0000cd` }}>Comments</Text>
+        </Text> */}
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ ...styles.navLink, marginLeft: 48 }}
@@ -107,6 +116,9 @@ const DefaultPostsScreen = ({ route }) => {
                   name={"location-outline"}
                   style={{ fontSize: 24, color: "#BDBDBD" }} // Змінити розмір іконки на 30
                 />
+                {/* <Text style={styles.navLinkText}>
+          Немає акаунту? <Text style={{ color: `#0000cd` }}>Map</Text>
+        </Text> */}
                 <Text>{item.placeMarker}</Text>
               </TouchableOpacity>
             </View>
@@ -120,11 +132,26 @@ const DefaultPostsScreen = ({ route }) => {
 export default DefaultPostsScreen;
 
 styles = StyleSheet.create({
+  // userWrap: {
+  //   flexDirection: "row",
+
+  //   paddingBottom: 10,
+  //   alignItems: "center",
+  // },
+
+  // userImg: {
+  //   width: 60,
+  //   marginRight: 10,
+  // },
+
   userName: {
     fontFamily: "Roboto-Bold",
     fontSize: 13,
   },
-
+  // userEmail: {
+  //   fontFamily: "Roboto-Regular",
+  //   fontSize: 11,
+  // },
   navLink: {
     flexDirection: "row",
     marginTop: 16,

@@ -1,3 +1,4 @@
+import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import {
   Text,
@@ -8,8 +9,12 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
+import { useSelector } from "react-redux";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { auth, db } from "../firebase/config";
+import { authSignOutUser } from "../Redux/Auth/authOperations";
 
 import del from "../image/del.png";
 import background from "../image/background.jpg";
@@ -19,10 +24,20 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
 
   const [userPosts, setUserPosts] = useState([]);
-<<<<<<< HEAD
   const [like, setLike] = useState(0);
   const { userId, nickName } = useSelector((state) => state.auth);
-
+  // console.log("userPosts", userPosts);
+  // const getUserPosts = async () => {
+  //   await onSnapshot(
+  //     where(collection(db, "posts", "userId", "==", userId), (queryPosts) => {
+  //       const comments = queryPosts.docs.map((doc) => ({
+  //         ...doc.data(),
+  //         // id: doc.id,
+  //       }));
+  //       console.log("comments", comments);
+  //     })
+  //   );
+  // };
   const likeCounter = () => {
     setLike((prev) => prev + 1);
   };
@@ -39,17 +54,18 @@ const ProfileScreen = () => {
       }));
       setUserPosts(comments);
     });
+
+    // Optionally, you can return the unsubscribe function if you need to detach the listener later
+    // return unsubscribe;
   };
 
   useEffect(() => {
     getUserPosts();
   }, []);
-=======
-
-
-
->>>>>>> parent of ee35bb2 (add firebase)
-
+  // const dispatch = useDispatch();
+  // const signOut = () => {
+  //   dispatch(authSignOutUser());
+  // };
   return (
     <View style={GlobalStyles.container}>
       <ImageBackground
@@ -71,6 +87,8 @@ const ProfileScreen = () => {
                 style={{
                   marginTop: 32,
                   marginBottom: 10,
+                  // justifyContent: "center",
+                  // alignItems: "center",
                 }}
               >
                 <Image
@@ -83,7 +101,9 @@ const ProfileScreen = () => {
                 <View
                   style={{
                     flexDirection: "row",
+                    // alignSelf: "flex-start",
                     justifyContent: "space-between",
+                    // alignItems: "center",
                   }}
                 >
                   <View
@@ -105,14 +125,12 @@ const ProfileScreen = () => {
                             ? "chatbubble-sharp"
                             : "chatbubble-outline"
                         }
-<<<<<<< HEAD
+                        // {/* // {{userPosts}> 0? name={"chatbubble-sharp"}: name={"chatbubble-outline"}} */}
                         style={{ fontSize: 24, color: "#FF6C00" }} // Змінити розмір іконки на 30
                       />
-=======
-                        style={{ fontSize: 24, color: "#FF6C00" }} 
-                      />
-                      
->>>>>>> parent of ee35bb2 (add firebase)
+                      {/* <Text style={styles.navLinkText}>
+          Немає акаунту? <Text style={{ color: `#0000cd` }}>Comments</Text>
+        </Text> */}
                     </TouchableOpacity>
                     <Text style={{ marginRight: 20 }}>{userPosts.length}</Text>
                     <TouchableOpacity
@@ -122,12 +140,11 @@ const ProfileScreen = () => {
                     >
                       <Ionicons
                         name={"thumbs-up-outline"}
-                        style={{ fontSize: 24, color: "#FF6C00" }} 
+                        style={{ fontSize: 24, color: "#FF6C00" }} // Змінити розмір іконки на 30
                       />
-<<<<<<< HEAD
-=======
-                      
->>>>>>> parent of ee35bb2 (add firebase)
+                      {/* <Text style={styles.navLinkText}>
+          Немає акаунту? <Text style={{ color: `#0000cd` }}>Comments</Text>
+        </Text> */}
                     </TouchableOpacity>
                     <Text>{like}</Text>
                   </View>
@@ -145,6 +162,9 @@ const ProfileScreen = () => {
                         name={"location-outline"}
                         style={{ fontSize: 24, color: "#BDBDBD" }} // Змінити розмір іконки на 30
                       />
+                      {/* <Text style={styles.navLinkText}>
+          Немає акаунту? <Text style={{ color: `#0000cd` }}>Map</Text>
+        </Text> */}
                       <Text>{item.placeMarker}</Text>
                     </TouchableOpacity>
                   </View>
@@ -152,6 +172,7 @@ const ProfileScreen = () => {
               </View>
             )}
           />
+          {/* <Button title="signOut" onPress={signOut} /> */}
         </View>
       </ImageBackground>
     </View>
@@ -159,9 +180,20 @@ const ProfileScreen = () => {
 };
 
 styles = StyleSheet.create({
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: "#fff",
+  //   // justifyContent: "center",
+  //   // alignItems: "center",
+  // },
   backgroundImg: {
     flex: 1,
+    // resizeMode: "cover",
     justifyContent: "flex-end",
+    // width: "100%",
+    // justifyContent: "center",
+
+    // alignItems: "center",
   },
   contentContainer: {
     position: "relative",
@@ -170,6 +202,7 @@ styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 92,
     marginTop: 103,
+    // paddingBottom: 45,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
   },

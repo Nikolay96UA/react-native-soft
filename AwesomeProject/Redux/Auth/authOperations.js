@@ -8,19 +8,24 @@ import {
 import { auth } from "../../firebase/config";
 import { authSlice } from "./authReducer";
 
+// ? деструктуризируем екшени
 const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
 
 const authSignUpUser =
   ({ email, password, nickName }) =>
   async (dispatch, getState) => {
+    // console.log("email, password, name", email, password, name);
     try {
+      // рееєструємо юзера
       await createUserWithEmailAndPassword(auth, email, password);
+      // метод вище повертає об'єкт, далі оновлюємо профіл і записуємо ім'я
 
       const user = auth.currentUser;
       console.log("user", user);
       await updateProfile(user, {
         displayName: nickName,
       });
+      // далі процедура після оновлення
       const { uid, displayName } = auth.currentUser;
 
       const userUpdateProfile = {
@@ -39,6 +44,8 @@ const authSignInUser =
   async (dispatch, getState) => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
+      // console.log("user", user);
+      //   return credentials.user;
     } catch (error) {
       console.log("error.code", error.code);
       console.log("error.message", error.message);

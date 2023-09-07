@@ -1,70 +1,70 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  View,
   ImageBackground,
-  Text,
-  TextInput,
-  Button,
-  Pressable,
   Image,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
   TouchableOpacity,
+  Platform,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
+  Button,
 } from "react-native";
-import BgImage from "../image/background.jpg";
-import addIcon from "../image/add.png";
+import validator from "validator";
+import background from "../image/background.jpg";
+import add from "../image/add.png";
+import { useNavigation } from "@react-navigation/native";
+import {
+  authSignInUser,
+  authSignUpUser,
+  authSignOutUser,
+} from "../Redux/Auth/authOperations";
+import { useDispatch } from "react-redux";
+import { GlobalStyles } from "../GlobalStyles";
 
-const RegistrationScreen = () => {
-  const [login, setLogin] = useState("");
+const initialState = {
+  nickName: "",
+  email: "",
+  password: "",
+};
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [showPass, setShowPass] = useState(true);
-
-  const [isFocused, setIsFocused] = useState(false);
+export default RegistrationScreen = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const [secureText, setSecureText] = useState(true);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [state, setState] = useState(initialState);
+  const [isValid, setIsValid] = useState(false);
 
-<<<<<<< HEAD
   const validateForm = () => {
     const { nickName, email, password } = state;
     const isValidName = nickName.trim().length >= 4;
     const isValidEmail = validator.isEmail(email);
     const isValidPassword = password.trim().length >= 8;
+    // const isValidPassword = validator.isAlphanumeric(password)
     setIsValid(isValidName && isValidEmail && isValidPassword);
-=======
-  const [textInputVisible, setTextInputVisible] = useState(true);
-
-  const onSubmit = () => {
-    console.log(email);
-    console.log(password);
-    console.log(login);
->>>>>>> parent of ee35bb2 (add firebase)
   };
-
-  const showPassword = () => {
-    setShowPass(!showPass);
-  };
-
-  const handleKeyboardDidShow = () => {
-    setTextInputVisible(false);
-  };
-
-  const handleKeyboardDidHide = () => {
-    setTextInputVisible(true);
-  };
-
   useEffect(() => {
-<<<<<<< HEAD
     validateForm();
   }, [state.nickName, state.email, state.password]);
+  // const validEmail = (value) => {
+  //   const email = validator.isEmail(value);
 
+  //   setIsValidEmail(email);
+  // };
   const keyboardHide = () => {
+    // if (!isValid && state.email.length > 0) return;
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+
+    // if (state !== initialState) {
+    //   console.log(state);
+    //   setState(initialState);
+    // }
   };
   const handleSubmit = () => {
     setIsShowKeyboard(false);
@@ -73,89 +73,45 @@ const RegistrationScreen = () => {
     dispatch(authSignUpUser(state));
     setState(initialState);
   };
-=======
-    const keyboardDidShowListener = Keyboard.addListener(
-      Platform.OS === "android" ? "keyboardDidShow" : "keyboardWillShow",
-      handleKeyboardDidShow
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      Platform.OS === "android" ? "keyboardDidHide" : "keyboardWillHide",
-      handleKeyboardDidHide
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
->>>>>>> parent of ee35bb2 (add firebase)
 
   const handleFocus = (key) => {
+    setIsShowKeyboard(true);
     setIsFocusedInput(key);
-    setIsFocused(true);
   };
-
   const handleBlur = () => {
-    setIsFocused(false);
+    setIsFocusedInput(null);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={regStyles.container}>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View style={GlobalStyles.container}>
         <ImageBackground
-          source={BgImage}
+          source={background}
           resizeMode="cover"
-          style={regStyles.bgImg}
+          style={styles.backgroundImg}
         >
-<<<<<<< HEAD
           <View
             style={{
               ...styles.form,
               paddingBottom: isShowKeyboard ? 120 : 45,
+              // marginBottom: isShowKeyboard ? 100 : 0,
             }}
+            // style={styles.form}
           >
             <View style={styles.acauntImgWrap}>
               <Image />
-=======
-          <View style={regStyles.formView}>
-            <View style={regStyles.userPhoto}>
-              <View style={regStyles.userPhotoPlus}>
-                <Image style={regStyles.addIcon} source={addIcon} />
-              </View>
->>>>>>> parent of ee35bb2 (add firebase)
             </View>
-            <Text style={regStyles.mainTitle}>Реєстрація</Text>
+            <Image style={styles.addImg} source={add} />
+            <Text style={styles.formTitle}>Реєстрація</Text>
             <KeyboardAvoidingView
               behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
-              <TextInput
-                placeholder="Логін"
-                style={[
-                  regStyles.inputsAll,
-                  isFocusedInput === "input1" ? regStyles.focusedInput : null,
-                ]}
-                onChangeText={setLogin}
-                onFocus={() => handleFocus("input1")}
-                onBlur={handleBlur}
-              />
-              <TextInput
-                style={[
-                  regStyles.inputsAll,
-                  isFocusedInput === "input2" ? regStyles.focusedInput : null,
-                ]}
-                onChangeText={setEmail}
-                onFocus={() => handleFocus("input2")}
-                onBlur={handleBlur}
-                placeholder="Адреса електронної пошти"
-              />
-              <View style={{ position: "relative" }}>
+              <View>
                 <TextInput
                   style={[
-                    regStyles.inputsAll,
-                    isFocusedInput === "input3" ? regStyles.focusedInput : null,
+                    styles.input,
+                    isFocusedInput === "input1" ? styles.focusedInput : null,
                   ]}
-<<<<<<< HEAD
                   placeholder="Логін"
                   onFocus={() => handleFocus("input1")}
                   onBlur={handleBlur}
@@ -182,6 +138,7 @@ const RegistrationScreen = () => {
                   value={state.email}
                   onChangeText={(value) => {
                     setState((prevState) => ({ ...prevState, email: value }));
+                    // validEmail(value);
                   }}
                 />
                 {state.email.length > 0 && !validator.isEmail(state.email) && (
@@ -198,39 +155,21 @@ const RegistrationScreen = () => {
                   ]}
                   placeholder="Пароль"
                   secureTextEntry={secureText}
-=======
-                  secureTextEntry ={showPass}
-                  onChangeText={setPassword}
->>>>>>> parent of ee35bb2 (add firebase)
                   onFocus={() => handleFocus("input3")}
                   onBlur={handleBlur}
-                  placeholder="Пароль"
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, password: value }))
+                  }
                 />
-                <Pressable
-                  style={{ position: "absolute", top: 0, right: 0 }}
-                  onPressIn={showPassword}
-                >
-                  <Text style={regStyles.inputText}>Показати</Text>
-                </Pressable>
-              </View>
-            </KeyboardAvoidingView>
-
-            {textInputVisible && (
-              <>
-                <TouchableOpacity
-                  style={regStyles.btn}
-                  activeOpacity={0.8}
-                  onPress={onSubmit}
-                >
-                  <Text style={regStyles.btnTitle}>Зареєструватися</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={regStyles.navLink} activeOpacity={0.8}>
-                  <Text style={regStyles.navLinkText}>
-                    Вже є аккаунт? Увійти
+                <TouchableOpacity style={styles.showPasswordBtn}>
+                  <Text
+                    style={styles.passwordText}
+                    onPress={() => setSecureText(!secureText)}
+                  >
+                    Показати
                   </Text>
                 </TouchableOpacity>
-<<<<<<< HEAD
                 {state.password.length < 8 && state.password.length > 0 && (
                   <Text style={{ color: `#ff0000` }}>
                     Пароль має містити не менше 8 символів
@@ -246,6 +185,13 @@ const RegistrationScreen = () => {
                 activeOpacity={0.8}
                 disabled={!isValid}
                 onPress={handleSubmit}
+                // onPress={() => {
+                //   console.log(state);
+                //   navigation.navigate("Home", {
+                //     screen: "Posts",
+                //     params: { userId: `${state.email}` },
+                //   });
+                // }}
               >
                 <Text
                   style={[
@@ -268,83 +214,74 @@ const RegistrationScreen = () => {
                 </Text>
               </TouchableOpacity>
             </KeyboardAvoidingView>
-=======
-              </>
-            )}
->>>>>>> parent of ee35bb2 (add firebase)
           </View>
+          {/* </View> */}
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
   );
 };
 
-<<<<<<< HEAD
 const styles = StyleSheet.create({
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: "#fff",
+  // },
   backgroundImg: {
     flex: 1,
+    // resizeMode: "cover",
     justifyContent: "flex-end",
+    // width: "100%",
+    // justifyContent: "center",
+
+    // alignItems: "center",
   },
 
   form: {
+    // borderTopEndRadius: 10,
+    // marginHorizontal: 40,
+    // ? це для відступів, коли виїзджає клаватура
+    // paddingBottom: 45,
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 16,
     paddingTop: 93,
+    // paddingBottom: 45,
     borderTopRightRadius: 25,
-=======
-const regStyles = StyleSheet.create({
-  container: { flex: 1 },
-  bgImg: {
-    width: "100%",
-    height: "100%",
-    flexDirection: "row",
-    alignItems: "flex-end",
-  },
-  formView: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 92,
-    paddingBottom: 32,
-    position: "relative",
-    backgroundColor: "#ffffff",
->>>>>>> parent of ee35bb2 (add firebase)
     borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
   },
-  userPhoto: {
+  acauntImgWrap: {
+    position: "absolute",
+    top: -60,
+    left: 140,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
     width: 120,
     height: 120,
-    position: "absolute",
-    left: "50%",
-    top: 0,
-    backgroundColor: "#F6F6F6",
-
-    borderRadius: 16,
-
-    transform: [{ translateX: -50 }, { translateY: -50 }],
   },
-  userPhotoPlus: {
+  addImg: {
+    position: "absolute",
+    top: 21,
+    left: 248,
     width: 25,
     height: 25,
-    position: "absolute",
-    left: "90%",
-    bottom: 0,
-    transform: [{ translateY: -15 }],
+  },
+  formTitle: {
+    color: "#212121",
+    textAlign: "center",
+
     justifyContent: "center",
-    alignItems: "center",
-    borderColor: "#FF6C00",
-    borderRadius: 50,
-    borderWidth: 1,
-  },
-  addIcon: {
-    width: 25,
-    height: 25,
-  },
-  mainTitle: {
+    marginBottom: 32,
     fontSize: 30,
-<<<<<<< HEAD
     fontFamily: "Roboto-Medium",
   },
+  // formText: {
+  //   color: "#212121",
+  //   textAlign: "center",
+
+  //   justifyContent: "center",
+  //   marginTop: 16,
+  //   fontFamily: "Roboto-Regular",
+  // },
   input: {
     padding: 10,
     borderWidth: 1,
@@ -352,23 +289,10 @@ const regStyles = StyleSheet.create({
 
     borderRadius: 5,
     height: 50,
-=======
-    textAlign: "center",
->>>>>>> parent of ee35bb2 (add firebase)
+    // marginHorizontal: 40,
+    // paddingHorizontal: 10,
     color: "#212121",
-    marginBottom: 33,
-  },
-  inputsAll: {
-    width: "100%",
-    height: 50,
-    paddingTop: 16,
-    paddingHorizontal: 16,
-    paddingBottom: 15,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: "#e8e8e8",
-    backgroundColor: "#f6f6f6",
+    backgroundColor: "#E8E8E8",
   },
   focusedInput: {
     padding: 10,
@@ -380,31 +304,42 @@ const regStyles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderColor: "#FF6C00",
   },
-  inputText: { position: "absolute", right: 16, top: 15, color: "#1B4371" },
+
+  showPasswordBtn: {
+    position: "absolute",
+    top: 15,
+    right: 16,
+  },
+  passwordText: {},
+
   btn: {
     height: 50,
     borderRadius: 100,
     marginTop: 43,
-<<<<<<< HEAD
     padding: 16,
+    // borderWidth: 1,
     backgroundColor: "#FF6C00",
     alignItems: "center",
-=======
-    padding: 15,
-    backgroundColor: "#FF6C00",
->>>>>>> parent of ee35bb2 (add firebase)
+
+    // ...Platform.select({
+    //   ios: {
+    //     backgroundColor: "transparent",
+    //     borderColor: "#f0f8ff",
+    //   },
+    //   android: {
+    //     backgroundColor: "#6495ed",
+    //     borderColor: "transparent",
+    //   },
+    // }),
   },
   btnTitle: {
     color: "#FFFFFF",
-    fontSize: 16,
     fontFamily: "Roboto-Regular",
-<<<<<<< HEAD
-=======
-    alignSelf: "center",
->>>>>>> parent of ee35bb2 (add firebase)
+    // fontSize: 16,
+
+    // color: Platform.OS === "ios" ? "#0000ff" : "#f0f8ff",
   },
   navLink: {
-    color: "#1B4371",
     marginTop: 16,
     alignItems: "center",
   },
@@ -417,8 +352,3 @@ const regStyles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
   },
 });
-<<<<<<< HEAD
-=======
-
-export default RegistrationScreen;
->>>>>>> parent of ee35bb2 (add firebase)
