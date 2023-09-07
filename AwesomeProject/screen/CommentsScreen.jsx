@@ -24,6 +24,52 @@ const CommentsScreen = ({ route }) => {
   const [photoUrl, setPhotoUrl] = useState(null);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
+<<<<<<< Updated upstream
+<<<<<<< HEAD
+=======
+
+>>>>>>> Stashed changes
+  const getPhotoFromFirestore = async () => {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    const post = querySnapshot.docs.find((doc) => doc.id === postId);
+    setPhotoUrl(post.data().photo);
+  };
+
+  useEffect(() => {
+    getPhotoFromFirestore();
+    getCommentsByPostId();
+  }, []);
+
+  const createPost = async () => {
+    keyboardHide();
+    setComment("");
+    setIsShowKeyboard(false);
+    try {
+      const docRef = await addDoc(collection(db, "posts", postId, "comments"), {
+        comment,
+        nickName,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      throw e;
+    }
+  };
+  const getCommentsByPostId = async () => {
+    const postsData = await onSnapshot(
+      collection(db, "posts", postId, "comments"),
+      (queryPosts) => {
+        const comments = queryPosts.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setAllComments(comments);
+      }
+    );
+
+    return postsData;
+  };
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
 
@@ -164,5 +210,10 @@ const CommentsScreen = ({ route }) => {
   );
 };
 
+<<<<<<< Updated upstream
+<<<<<<< HEAD
+styles = StyleSheet.create({});
+=======
 
+>>>>>>> parent of ee35bb2 (add firebase)
 export default CommentsScreen;

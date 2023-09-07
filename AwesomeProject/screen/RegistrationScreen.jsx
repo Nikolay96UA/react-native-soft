@@ -1,32 +1,44 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  View,
   ImageBackground,
-  Text,
-  TextInput,
-  Button,
-  Pressable,
   Image,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
   TouchableOpacity,
+  Platform,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
+  Button,
 } from "react-native";
-import BgImage from "../image/background.jpg";
-import addIcon from "../image/add.png";
+import validator from "validator";
+import background from "../../../assets/images/background.jpg";
+import add from "../../../assets/images/add.png";
+import { useNavigation } from "@react-navigation/native";
+import {
+  authSignInUser,
+  authSignUpUser,
+  authSignOutUser,
+} from "../../../Redux/Auth/authOperations";
+import { useDispatch } from "react-redux";
+import { GlobalStyles } from "../../../GlobalStyles";
 
-const RegistrationScreen = () => {
-  const [login, setLogin] = useState("");
+const initialState = {
+  nickName: "",
+  email: "",
+  password: "",
+};
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [showPass, setShowPass] = useState(true);
-
-  const [isFocused, setIsFocused] = useState(false);
+export default RegistrationScreen = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const [secureText, setSecureText] = useState(true);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [state, setState] = useState(initialState);
+  const [isValid, setIsValid] = useState(false);
 
   const [textInputVisible, setTextInputVisible] = useState(true);
 
@@ -56,7 +68,6 @@ const RegistrationScreen = () => {
   const handleKeyboardDidHide = () => {
     setTextInputVisible(true);
   };
-
   useEffect(() => {
 <<<<<<< Updated upstream
     const keyboardDidShowListener = Keyboard.addListener(
@@ -89,21 +100,20 @@ const RegistrationScreen = () => {
 >>>>>>> Stashed changes
 
   const handleFocus = (key) => {
+    setIsShowKeyboard(true);
     setIsFocusedInput(key);
-    setIsFocused(true);
   };
-
   const handleBlur = () => {
-    setIsFocused(false);
+    setIsFocusedInput(null);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={regStyles.container}>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View style={GlobalStyles.container}>
         <ImageBackground
-          source={BgImage}
+          source={background}
           resizeMode="cover"
-          style={regStyles.bgImg}
+          style={styles.backgroundImg}
         >
 <<<<<<< Updated upstream
           <View style={regStyles.formView}>
@@ -122,35 +132,16 @@ const RegistrationScreen = () => {
               <Image />
 >>>>>>> Stashed changes
             </View>
-            <Text style={regStyles.mainTitle}>Реєстрація</Text>
+            <Image style={styles.addImg} source={add} />
+            <Text style={styles.formTitle}>Реєстрація</Text>
             <KeyboardAvoidingView
               behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
-              <TextInput
-                placeholder="Логін"
-                style={[
-                  regStyles.inputsAll,
-                  isFocusedInput === "input1" ? regStyles.focusedInput : null,
-                ]}
-                onChangeText={setLogin}
-                onFocus={() => handleFocus("input1")}
-                onBlur={handleBlur}
-              />
-              <TextInput
-                style={[
-                  regStyles.inputsAll,
-                  isFocusedInput === "input2" ? regStyles.focusedInput : null,
-                ]}
-                onChangeText={setEmail}
-                onFocus={() => handleFocus("input2")}
-                onBlur={handleBlur}
-                placeholder="Адреса електронної пошти"
-              />
-              <View style={{ position: "relative" }}>
+              <View>
                 <TextInput
                   style={[
-                    regStyles.inputsAll,
-                    isFocusedInput === "input3" ? regStyles.focusedInput : null,
+                    styles.input,
+                    isFocusedInput === "input1" ? styles.focusedInput : null,
                   ]}
 <<<<<<< Updated upstream
                   secureTextEntry ={showPass}
@@ -182,6 +173,7 @@ const RegistrationScreen = () => {
                   value={state.email}
                   onChangeText={(value) => {
                     setState((prevState) => ({ ...prevState, email: value }));
+                    // validEmail(value);
                   }}
                 />
                 {state.email.length > 0 && !validator.isEmail(state.email) && (
@@ -201,30 +193,17 @@ const RegistrationScreen = () => {
 >>>>>>> Stashed changes
                   onFocus={() => handleFocus("input3")}
                   onBlur={handleBlur}
-                  placeholder="Пароль"
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, password: value }))
+                  }
                 />
-                <Pressable
-                  style={{ position: "absolute", top: 0, right: 0 }}
-                  onPressIn={showPassword}
-                >
-                  <Text style={regStyles.inputText}>Показати</Text>
-                </Pressable>
-              </View>
-            </KeyboardAvoidingView>
-
-            {textInputVisible && (
-              <>
-                <TouchableOpacity
-                  style={regStyles.btn}
-                  activeOpacity={0.8}
-                  onPress={onSubmit}
-                >
-                  <Text style={regStyles.btnTitle}>Зареєструватися</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={regStyles.navLink} activeOpacity={0.8}>
-                  <Text style={regStyles.navLinkText}>
-                    Вже є аккаунт? Увійти
+                <TouchableOpacity style={styles.showPasswordBtn}>
+                  <Text
+                    style={styles.passwordText}
+                    onPress={() => setSecureText(!secureText)}
+                  >
+                    Показати
                   </Text>
                 </TouchableOpacity>
 <<<<<<< Updated upstream
@@ -270,13 +249,26 @@ const RegistrationScreen = () => {
             </KeyboardAvoidingView>
 >>>>>>> Stashed changes
           </View>
+          {/* </View> */}
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
   );
 };
 
-<<<<<<< Updated upstream
+<<<<<<< HEAD
+const styles = StyleSheet.create({
+  backgroundImg: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+
+  form: {
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 16,
+    paddingTop: 93,
+    borderTopRightRadius: 25,
+=======
 const regStyles = StyleSheet.create({
   container: { flex: 1 },
   bgImg: {
@@ -292,56 +284,33 @@ const regStyles = StyleSheet.create({
     paddingBottom: 32,
     position: "relative",
     backgroundColor: "#ffffff",
-=======
-const styles = StyleSheet.create({
-  backgroundImg: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-
-  form: {
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 16,
-    paddingTop: 93,
-    borderTopRightRadius: 25,
->>>>>>> Stashed changes
+>>>>>>> parent of ee35bb2 (add firebase)
     borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
   },
-  userPhoto: {
+  acauntImgWrap: {
+    position: "absolute",
+    top: -60,
+    left: 140,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
     width: 120,
     height: 120,
-    position: "absolute",
-    left: "50%",
-    top: 0,
-    backgroundColor: "#F6F6F6",
-
-    borderRadius: 16,
-
-    transform: [{ translateX: -50 }, { translateY: -50 }],
   },
-  userPhotoPlus: {
-    width: 25,
-    height: 25,
+  addImg: {
     position: "absolute",
-    left: "90%",
-    bottom: 0,
-    transform: [{ translateY: -15 }],
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "#FF6C00",
-    borderRadius: 50,
-    borderWidth: 1,
-  },
-  addIcon: {
+    top: 21,
+    left: 248,
     width: 25,
     height: 25,
   },
-  mainTitle: {
-    fontSize: 30,
-<<<<<<< Updated upstream
+  formTitle: {
+    color: "#212121",
     textAlign: "center",
-=======
+
+    justifyContent: "center",
+    marginBottom: 32,
+    fontSize: 30,
+<<<<<<< HEAD
     fontFamily: "Roboto-Medium",
   },
   input: {
@@ -351,21 +320,11 @@ const styles = StyleSheet.create({
 
     borderRadius: 5,
     height: 50,
->>>>>>> Stashed changes
+=======
+    textAlign: "center",
+>>>>>>> parent of ee35bb2 (add firebase)
     color: "#212121",
-    marginBottom: 33,
-  },
-  inputsAll: {
-    width: "100%",
-    height: 50,
-    paddingTop: 16,
-    paddingHorizontal: 16,
-    paddingBottom: 15,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: "#e8e8e8",
-    backgroundColor: "#f6f6f6",
+    backgroundColor: "#E8E8E8",
   },
   focusedInput: {
     padding: 10,
@@ -377,31 +336,36 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderColor: "#FF6C00",
   },
-  inputText: { position: "absolute", right: 16, top: 15, color: "#1B4371" },
+
+  showPasswordBtn: {
+    position: "absolute",
+    top: 15,
+    right: 16,
+  },
+  passwordText: {},
+
   btn: {
     height: 50,
     borderRadius: 100,
     marginTop: 43,
-<<<<<<< Updated upstream
-    padding: 15,
-    backgroundColor: "#FF6C00",
-=======
+<<<<<<< HEAD
     padding: 16,
     backgroundColor: "#FF6C00",
     alignItems: "center",
->>>>>>> Stashed changes
+=======
+    padding: 15,
+    backgroundColor: "#FF6C00",
+>>>>>>> parent of ee35bb2 (add firebase)
   },
   btnTitle: {
     color: "#FFFFFF",
-    fontSize: 16,
     fontFamily: "Roboto-Regular",
-<<<<<<< Updated upstream
-    alignSelf: "center",
+<<<<<<< HEAD
 =======
->>>>>>> Stashed changes
+    alignSelf: "center",
+>>>>>>> parent of ee35bb2 (add firebase)
   },
   navLink: {
-    color: "#1B4371",
     marginTop: 16,
     alignItems: "center",
   },

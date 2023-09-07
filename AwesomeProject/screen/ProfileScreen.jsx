@@ -19,6 +19,32 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
 
   const [userPosts, setUserPosts] = useState([]);
+<<<<<<< HEAD
+  const [like, setLike] = useState(0);
+  const { userId, nickName } = useSelector((state) => state.auth);
+
+  const likeCounter = () => {
+    setLike((prev) => prev + 1);
+  };
+  const getUserPosts = async () => {
+    const queryPosts = await query(
+      collection(db, "posts"),
+      where("userId", "==", userId)
+    );
+
+    const unsubscribe = await onSnapshot(queryPosts, (snapshot) => {
+      const comments = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUserPosts(comments);
+    });
+  };
+
+  useEffect(() => {
+    getUserPosts();
+  }, []);
+=======
 
 
 
