@@ -30,10 +30,19 @@ const RegistrationScreen = () => {
 
   const [textInputVisible, setTextInputVisible] = useState(true);
 
+<<<<<<< Updated upstream
   const onSubmit = () => {
     console.log(email);
     console.log(password);
     console.log(login);
+=======
+  const validateForm = () => {
+    const { nickName, email, password } = state;
+    const isValidName = nickName.trim().length >= 4;
+    const isValidEmail = validator.isEmail(email);
+    const isValidPassword = password.trim().length >= 8;
+    setIsValid(isValidName && isValidEmail && isValidPassword);
+>>>>>>> Stashed changes
   };
 
   const showPassword = () => {
@@ -49,6 +58,7 @@ const RegistrationScreen = () => {
   };
 
   useEffect(() => {
+<<<<<<< Updated upstream
     const keyboardDidShowListener = Keyboard.addListener(
       Platform.OS === "android" ? "keyboardDidShow" : "keyboardWillShow",
       handleKeyboardDidShow
@@ -64,6 +74,19 @@ const RegistrationScreen = () => {
       keyboardDidHideListener.remove();
     };
   }, []);
+=======
+    validateForm();
+  }, [state.nickName, state.email, state.password]);
+
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
+  const handleKeyboardDidHide = () => {
+    setTextInputVisible(true);
+  };
+>>>>>>> Stashed changes
 
   const handleFocus = (key) => {
     setIsFocusedInput(key);
@@ -82,11 +105,22 @@ const RegistrationScreen = () => {
           resizeMode="cover"
           style={regStyles.bgImg}
         >
+<<<<<<< Updated upstream
           <View style={regStyles.formView}>
             <View style={regStyles.userPhoto}>
               <View style={regStyles.userPhotoPlus}>
                 <Image style={regStyles.addIcon} source={addIcon} />
               </View>
+=======
+          <View
+            style={{
+              ...styles.form,
+              paddingBottom: isShowKeyboard ? 120 : 45,
+            }}
+          >
+            <View style={styles.acauntImgWrap}>
+              <Image />
+>>>>>>> Stashed changes
             </View>
             <Text style={regStyles.mainTitle}>Реєстрація</Text>
             <KeyboardAvoidingView
@@ -118,8 +152,53 @@ const RegistrationScreen = () => {
                     regStyles.inputsAll,
                     isFocusedInput === "input3" ? regStyles.focusedInput : null,
                   ]}
+<<<<<<< Updated upstream
                   secureTextEntry ={showPass}
                   onChangeText={setPassword}
+=======
+                  placeholder="Логін"
+                  onFocus={() => handleFocus("input1")}
+                  onBlur={handleBlur}
+                  value={state.nickName}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, nickName: value }))
+                  }
+                />
+                {state.nickName.length > 0 && state.nickName.length < 4 && (
+                  <Text style={{ color: `#ff0000` }}>
+                    Логін має містити не менше 4 символів
+                  </Text>
+                )}
+              </View>
+              <View style={{ marginTop: 16 }}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    isFocusedInput === "input2" ? styles.focusedInput : null,
+                  ]}
+                  placeholder="Адреса електронної пошти"
+                  onFocus={() => handleFocus("input2")}
+                  onBlur={handleBlur}
+                  value={state.email}
+                  onChangeText={(value) => {
+                    setState((prevState) => ({ ...prevState, email: value }));
+                  }}
+                />
+                {state.email.length > 0 && !validator.isEmail(state.email) && (
+                  <Text style={{ color: `#ff0000` }}>
+                    Поле Email заповнено не коректно
+                  </Text>
+                )}
+              </View>
+              <View style={{ marginTop: 16, position: "relative" }}>
+                <TextInput
+                  style={[
+                    regStyles.inputsAll,
+                    isFocusedInput === "input3" ? regStyles.focusedInput : null,
+                  ]}
+                  placeholder="Пароль"
+                  secureTextEntry={secureText}
+>>>>>>> Stashed changes
                   onFocus={() => handleFocus("input3")}
                   onBlur={handleBlur}
                   placeholder="Пароль"
@@ -148,8 +227,48 @@ const RegistrationScreen = () => {
                     Вже є аккаунт? Увійти
                   </Text>
                 </TouchableOpacity>
+<<<<<<< Updated upstream
               </>
             )}
+=======
+                {state.password.length < 8 && state.password.length > 0 && (
+                  <Text style={{ color: `#ff0000` }}>
+                    Пароль має містити не менше 8 символів
+                  </Text>
+                )}
+              </View>
+            </KeyboardAvoidingView>
+
+              <TouchableOpacity
+                style={[
+                  styles.btn,
+                  { backgroundColor: !isValid ? "#F6F6F6" : "#FF6C00" },
+                ]}
+                activeOpacity={0.8}
+                disabled={!isValid}
+                onPress={handleSubmit}
+              >
+                <Text
+                  style={[
+                    styles.btnTitle,
+                    { color: !isValid ? "#BDBDBD" : "#FFFFFF" },
+                  ]}
+                >
+                  <Text style={regStyles.btnTitle}>Зареєструватися</Text>
+                </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.navLink}
+                onPress={() => navigation.navigate("Login")}
+                activeOpacity={0.5}
+              >
+                <Text style={styles.navLinkText}>
+                  Вже є акаунт?
+                  <Text style={{ color: `#0000cd` }}> Увійти</Text>
+                </Text>
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+>>>>>>> Stashed changes
           </View>
         </ImageBackground>
       </View>
@@ -157,6 +276,7 @@ const RegistrationScreen = () => {
   );
 };
 
+<<<<<<< Updated upstream
 const regStyles = StyleSheet.create({
   container: { flex: 1 },
   bgImg: {
@@ -172,6 +292,19 @@ const regStyles = StyleSheet.create({
     paddingBottom: 32,
     position: "relative",
     backgroundColor: "#ffffff",
+=======
+const styles = StyleSheet.create({
+  backgroundImg: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+
+  form: {
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 16,
+    paddingTop: 93,
+    borderTopRightRadius: 25,
+>>>>>>> Stashed changes
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
@@ -206,7 +339,19 @@ const regStyles = StyleSheet.create({
   },
   mainTitle: {
     fontSize: 30,
+<<<<<<< Updated upstream
     textAlign: "center",
+=======
+    fontFamily: "Roboto-Medium",
+  },
+  input: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#f0f8ff",
+
+    borderRadius: 5,
+    height: 50,
+>>>>>>> Stashed changes
     color: "#212121",
     marginBottom: 33,
   },
@@ -237,14 +382,23 @@ const regStyles = StyleSheet.create({
     height: 50,
     borderRadius: 100,
     marginTop: 43,
+<<<<<<< Updated upstream
     padding: 15,
     backgroundColor: "#FF6C00",
+=======
+    padding: 16,
+    backgroundColor: "#FF6C00",
+    alignItems: "center",
+>>>>>>> Stashed changes
   },
   btnTitle: {
     color: "#FFFFFF",
     fontSize: 16,
     fontFamily: "Roboto-Regular",
+<<<<<<< Updated upstream
     alignSelf: "center",
+=======
+>>>>>>> Stashed changes
   },
   navLink: {
     color: "#1B4371",
@@ -260,5 +414,8 @@ const regStyles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
   },
 });
+<<<<<<< Updated upstream
 
 export default RegistrationScreen;
+=======
+>>>>>>> Stashed changes
