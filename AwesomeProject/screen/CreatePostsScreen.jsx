@@ -18,8 +18,8 @@ import * as MediaLibrary from "expo-media-library";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { useSelector } from "react-redux";
-import { db, storage } from "../firebase/config";
-import { GlobalStyles } from "../GlobalStyles";
+import { db, storage } from "../../../firebase/config";
+import { GlobalStyles } from "../../../GlobalStyles";
 
 export default function CreatePostScreen() {
   const navigation = useNavigation();

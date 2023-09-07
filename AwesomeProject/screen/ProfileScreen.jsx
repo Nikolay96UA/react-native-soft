@@ -1,4 +1,3 @@
-import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import {
   Text,
@@ -9,12 +8,8 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import { useSelector } from "react-redux";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { auth, db } from "../firebase/config";
-import { authSignOutUser } from "../Redux/Auth/authOperations";
 
 import del from "../image/del.png";
 import background from "../image/background.jpg";
@@ -24,48 +19,10 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
 
   const [userPosts, setUserPosts] = useState([]);
-  const [like, setLike] = useState(0);
-  const { userId, nickName } = useSelector((state) => state.auth);
-  // console.log("userPosts", userPosts);
-  // const getUserPosts = async () => {
-  //   await onSnapshot(
-  //     where(collection(db, "posts", "userId", "==", userId), (queryPosts) => {
-  //       const comments = queryPosts.docs.map((doc) => ({
-  //         ...doc.data(),
-  //         // id: doc.id,
-  //       }));
-  //       console.log("comments", comments);
-  //     })
-  //   );
-  // };
-  const likeCounter = () => {
-    setLike((prev) => prev + 1);
-  };
-  const getUserPosts = async () => {
-    const queryPosts = await query(
-      collection(db, "posts"),
-      where("userId", "==", userId)
-    );
 
-    const unsubscribe = await onSnapshot(queryPosts, (snapshot) => {
-      const comments = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setUserPosts(comments);
-    });
 
-    // Optionally, you can return the unsubscribe function if you need to detach the listener later
-    // return unsubscribe;
-  };
 
-  useEffect(() => {
-    getUserPosts();
-  }, []);
-  // const dispatch = useDispatch();
-  // const signOut = () => {
-  //   dispatch(authSignOutUser());
-  // };
+
   return (
     <View style={GlobalStyles.container}>
       <ImageBackground
@@ -125,12 +82,9 @@ const ProfileScreen = () => {
                             ? "chatbubble-sharp"
                             : "chatbubble-outline"
                         }
-                        // {/* // {{userPosts}> 0? name={"chatbubble-sharp"}: name={"chatbubble-outline"}} */}
-                        style={{ fontSize: 24, color: "#FF6C00" }} // Змінити розмір іконки на 30
+                        style={{ fontSize: 24, color: "#FF6C00" }} 
                       />
-                      {/* <Text style={styles.navLinkText}>
-          Немає акаунту? <Text style={{ color: `#0000cd` }}>Comments</Text>
-        </Text> */}
+                      
                     </TouchableOpacity>
                     <Text style={{ marginRight: 20 }}>{userPosts.length}</Text>
                     <TouchableOpacity
@@ -140,11 +94,9 @@ const ProfileScreen = () => {
                     >
                       <Ionicons
                         name={"thumbs-up-outline"}
-                        style={{ fontSize: 24, color: "#FF6C00" }} // Змінити розмір іконки на 30
+                        style={{ fontSize: 24, color: "#FF6C00" }} 
                       />
-                      {/* <Text style={styles.navLinkText}>
-          Немає акаунту? <Text style={{ color: `#0000cd` }}>Comments</Text>
-        </Text> */}
+                      
                     </TouchableOpacity>
                     <Text>{like}</Text>
                   </View>
